@@ -37,5 +37,16 @@ html, body,
     text-align: center;
 
   }
+  .sidenav{
+    /* Mostrar SideNav por encima de los controles de zoom */
+    z-index: 1001;
+  
+    /*Color del texto dentro del SideNav. Por defecto es blanco*/
+    color: black;
+  }
+  .my-sidenav-close{
+    text-align:right;
+    padding: 10px 10px 0 0;
+  }
   
   

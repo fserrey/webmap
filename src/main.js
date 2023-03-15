@@ -1,5 +1,6 @@
+var sidenav_popup_parques
 
-//mapa
+//mapa de Madrid
 var map = L.map('map', {
   center: [40.4167754, -3.7037902],
   zoom: 13
@@ -55,26 +56,14 @@ var Spain_UnidadAdministrativa = L.tileLayer.wms('http://www.ign.es/wms-inspire/
 
 });
 
+// plugin de capas del IGN
 var lidar = L.tileLayer.providerESP('LiDAR');
 var curvas_de_nivel = L.tileLayer.providerESP('MDT.CurvasNivel');
 var nombres_geograficos = L.tileLayer.providerESP('NombresGeograficos');
 
 // Agregar plugin de edición
-var drawnItems = new L.FeatureGroup();
-map.addLayer(drawnItems);
-var drawControl = new L.Control.Draw({
-  edit: {
-    featureGroup: drawnItems
-  },
-  draw: {
-    polygon: true,
-    polyline: true,
-    rectangle: true,
-    circle: true,
-    marker: true
-  }
-});
-map.addControl(drawControl);
+var drawnItems = new L.FeatureGroup().addTo(map);
+// map.addLayer(drawnItems);
 
 // Cambiar estilo de los polígonos dibujados
 map.on('draw:created', function (e) {
@@ -86,6 +75,35 @@ map.on('draw:created', function (e) {
     weight: 2
   });
   drawnItems.addLayer(layer);
+});
+
+// Agregar datos usando omnivore
+var parques = omnivore.csv('data/puntos.csv')
+  .on('ready', function (layer) {
+    this.eachLayer(function (marker) {
+      marker.bindPopup('<strong>' + marker.toGeoJSON().properties.nombre + '</strong><br>' +
+        marker.toGeoJSON().properties.descripcion);
+    });
+  })
+  .addTo(map);
+
+
+var parques = L.geoJson(data, {
+  onEachFeature: function (feature, layer) {
+    //layer.bindPopup(feature.properties.NAME);
+    layer.on('click', function(){
+      document.getElementById('parques-descripcion').innerHTML = feature.properties.NAME;
+      sidenav_popup_parques.open();
+    })
+  }
+});
+
+parques.addTo(map);
+
+document.addEventListener('DOMContentLoaded', function() {
+  var elems = document.querySelectorAll('.sidenav');
+  var instances = M.Sidenav.init(elems);
+  sidenav_popup_parques = instances[0];
 });
 
 // Cargar capa de puntos con omnivore y agregar pop-up con atributos
@@ -104,18 +122,17 @@ map.on('draw:created', function (e) {
 //  minimized: false
 //}).addTo(map);
 
-// Agregar plugin de localización
-// L.control.locate({
-//   strings: {
-//     title: "Mostrar mi ubicación"
-//   }
-// }).addTo(map);
+// var miniMap = new L.Control.MiniMap(L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'), {
+//       toggleDisplay: true,
+//       minimized: true,
+//     });
+//     
+// miniMap.addTo(map);
 
 //controles
 L.control.scale({
   position: 'bottomright',
   imperial: false,
-
 }).addTo(map);
 
 var baseMaps = {
@@ -124,7 +141,6 @@ var baseMaps = {
   "Terreno": terrain,
   "Modo oscuro": toner,
   "Modo claro": stadia
-
 };
 
 var overlays = {
@@ -136,24 +152,23 @@ var overlays = {
   "Nombres geográficos": nombres_geograficos,
 };
 
-var miniMap = new L.Control.MiniMap(L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'), {
-      toggleDisplay: true,
-      minimized: true,
-    })
-    
-//miniMap.addTo(map);
 
-
+// var controlCapas = new 
 L.control.layers(baseMaps, overlays).addTo(map);
+//map.addControl(controlCapas);
+//controlCapas.addTo(map);
 
-// var drawControl = new L.Control.Draw({
-//   edit: {
-//     featureGroup: capaEdicion
-//   }
-// });
-// 
-// 
-// map.addControl(drawControl);
+var drawControl = new L.Control.Draw({
+  edit: {
+    featureGroup: drawnItems
+  },
+  draw: {
+    marker: true,
+    polyline: true,
+    polygon: true
+  }
+});
+map.addControl(drawControl);
 
 
 

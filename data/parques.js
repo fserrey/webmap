@@ -3,47 +3,38 @@ var parquesjson = {
     "features" : [{
         "type" : "Feature",
         "properties" : {
-          "nombre" : "Parc del Putget"
+          "nombre" : "Campo del Moro"
         },
         "geometry" : {
           "type" : "Point",
-          "coordinates" : [2.1426773071289062, 41.408230864902784]
+          "coordinates" : [-3.717643517405592, 40.41725023965558]
         }
       }, {
         "type" : "Feature",
         "properties" : {
-          "nombre" : "Parc de la Ciutadella"
+          "nombre" : "Parque del Oeste"
         },
         "geometry" : {
           "type" : "Point",
-          "coordinates" : [2.186450958251953, 41.387627792918444]
+          "coordinates" : [-3.7264886263951853, 40.430137125992026]
         }
       }, {
         "type" : "Feature",
         "properties" : {
-          "nombre" : "Montjuïc"
+          "nombre" : "Parque del Retiro"
         },
         "geometry" : {
           "type" : "Point",
-          "coordinates" : [2.1582984924316406, 41.361220562647034]
+          "coordinates" : [-3.68212606611948, 40.4140037497298]
         }
       }, {
         "type" : "Feature",
         "properties" : {
-          "nombre" : "Parc de Pedralbes"
+          "nombre" : "Parque Tierno Galván"
         },
         "geometry" : {
           "type" : "Point",
-          "coordinates" : [2.117443084716797, 41.38672625940192]
+          "coordinates" : [-3.683787586934398, 40.39051311665379]
         }
-      }, {
-        "type" : "Feature",
-        "properties" : {
-          "nombre" : "Parc Güell"
-        },
-        "geometry" : {
-          "type" : "Point",
-          "coordinates" : [2.151775360107422, 41.41479672137174]
-        }
-    }]
+      }]
   };
