@@ -1,0 +1,41 @@
+html, body,
+#map {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  #minimap {
+    width: 150px;
+    height: 150px;
+    border: 1px solid black;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+  }
+  .header {
+    height: 80px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 999;
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
+  .title {
+    font-family: "Trebuchet MS", Verdana, sans-serif;
+    font-size: 30px;
+    text-align: center;
+    margin-top: 10px;
+  }
+  .subtitle {
+    font-family: "Trebuchet MS", Verdana, sans-serif;
+    font-size: 18px;
+    margin: 0;
+    text-align: center;
+
+  }
+  
+  
