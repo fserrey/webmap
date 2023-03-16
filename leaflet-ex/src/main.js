@@ -111,9 +111,11 @@ document.addEventListener('DOMContentLoaded', function() {
 //  minimized: false
 //}).addTo(map);
 
-var osmMiniMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+var osmMiniMap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 18,
-  attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+  attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap' +
+    '</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">' +
+    'CC-BY-SA</a>'
 });
 
 var miniMap = new L.Control.MiniMap(osmMiniMap, {
