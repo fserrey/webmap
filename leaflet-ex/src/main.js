@@ -2,6 +2,7 @@ var sidenav_popup_parques
 
 //mapa de Madrid
 var map = L.map('map', {
+  miniMap: true,
   center: [40.4167754, -3.7037902],
   zoom: 13
 });
@@ -78,7 +79,7 @@ map.on('draw:created', function (e) {
 });
 
 // Agregar datos usando omnivore
-var parques = omnivore.csv('data/puntos.csv')
+var parquesCSV = omnivore.csv('data/puntos.csv')
   .on('ready', function (layer) {
     this.eachLayer(function (marker) {
       marker.bindPopup('<strong>' + marker.toGeoJSON().properties.nombre + '</strong><br>' +
@@ -87,18 +88,6 @@ var parques = omnivore.csv('data/puntos.csv')
   })
   .addTo(map);
 
-
-var parques = L.geoJson(data, {
-  onEachFeature: function (feature, layer) {
-    //layer.bindPopup(feature.properties.NAME);
-    layer.on('click', function(){
-      document.getElementById('parques-descripcion').innerHTML = feature.properties.NAME;
-      sidenav_popup_parques.open();
-    })
-  }
-});
-
-parques.addTo(map);
 
 document.addEventListener('DOMContentLoaded', function() {
   var elems = document.querySelectorAll('.sidenav');
@@ -122,12 +111,15 @@ document.addEventListener('DOMContentLoaded', function() {
 //  minimized: false
 //}).addTo(map);
 
-// var miniMap = new L.Control.MiniMap(L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'), {
-//       toggleDisplay: true,
-//       minimized: true,
-//     });
-//     
-// miniMap.addTo(map);
+var osmMiniMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 18,
+  attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+});
+
+var miniMap = new L.Control.MiniMap(osmMiniMap, {
+  toggleDisplay: true,
+  minimized: true,
+}).addTo(map);
 
 //controles
 L.control.scale({
@@ -144,13 +136,14 @@ var baseMaps = {
 };
 
 var overlays = {
-  "Parques": parques,
+  "Parques": parquesCSV,
   "PNOA": Spain_PNOA_Ortoimagen,
   "Unidades Administrativas": Spain_UnidadAdministrativa,
   "LiDAR": lidar,
   "Curvas de nivel": curvas_de_nivel,
   "Nombres geográficos": nombres_geograficos,
 };
+
 
 
 // var controlCapas = new 
@@ -165,7 +158,10 @@ var drawControl = new L.Control.Draw({
   draw: {
     marker: true,
     polyline: true,
-    polygon: true
+    polygon: true,
+    rectangle: false,
+    circle: false,
+    circlemarker: false
   }
 });
 map.addControl(drawControl);

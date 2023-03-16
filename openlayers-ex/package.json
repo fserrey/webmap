@@ -4,12 +4,26 @@
     "description": "P3 - Openlayers Node.js, HTML y CSS",
     "main": "app.js",
     "scripts": {
-      "start": "node app.js"
+        "start": "webpack serve",
+        "build": "webpack"
     },
     "dependencies": {
-      "ol": "^7.1.0",
-      "ejs": "^3.1.6",
-      "express": "^4.17.1"
+        "ejs": "^3.1.6",
+        "esm": "^3.2.25",
+        "express": "^4.17.1",
+        "ol": "^6.9.0",
+        "ol-layerswitcher": "^3.8.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.21.3",
+        "@babel/preset-env": "^7.20.2",
+        "@types/esm": "^3.2.0",
+        "babel-loader": "^9.1.2",
+        "css-loader": "^6.7.3",
+        "html-webpack-plugin": "^5.5.0",
+        "style-loader": "^3.3.2",
+        "webpack": "^5.76.1",
+        "webpack-cli": "^5.0.1",
+        "webpack-dev-server": "^4.12.0"
     }
-  }
-  
+}
