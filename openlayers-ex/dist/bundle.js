@@ -49815,7 +49815,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var ol_control__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ol/control */ "./node_modules/ol/control/OverviewMap.js");
 /* harmony import */ var ol_layerswitcher__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ol-layerswitcher */ "./node_modules/ol-layerswitcher/dist/ol-layerswitcher.js");
 /* harmony import */ var ol_layerswitcher__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(ol_layerswitcher__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var ol_Overlay__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ol/Overlay */ "./node_modules/ol/Overlay.js");
 /* harmony import */ var ol_style__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ol/style */ "./node_modules/ol/style/Circle.js");
+/* harmony import */ var ol_coordinate__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ol/coordinate */ "./node_modules/ol/coordinate.js");
+
+
 
 
 
@@ -49887,22 +49891,36 @@ var map = new ol_Map__WEBPACK_IMPORTED_MODULE_16__["default"]({
   target: "map",
   view: new ol_View__WEBPACK_IMPORTED_MODULE_17__["default"]({
     center: (0,ol_proj__WEBPACK_IMPORTED_MODULE_2__.fromLonLat)([-3.7038, 40.4168]),
-    zoom: 14
+    zoom: 14,
+    maxZoom: 18,
+    minZoom: 10
   }),
   controls: []
 });
 map.addControl(new ol_control__WEBPACK_IMPORTED_MODULE_18__["default"]());
-map.addControl(new ol_control__WEBPACK_IMPORTED_MODULE_19__["default"]());
+var overviewMapControl = new ol_control__WEBPACK_IMPORTED_MODULE_19__["default"]({
+  collapsed: false
+});
+map.addControl(overviewMapControl);
 var layerSwitcher = new (ol_layerswitcher__WEBPACK_IMPORTED_MODULE_3___default())({
   tipLabel: "Capas"
 });
 map.addControl(layerSwitcher);
+var popup = new ol_Overlay__WEBPACK_IMPORTED_MODULE_20__["default"].Popup();
+map.addOverlay(popup);
 map.on("click", function (evt) {
-  map.forEachFeatureAtPixel(evt.pixel, function (feature) {
-    var coordinates = feature.getGeometry().getCoordinates();
-    var hdms = toStringHDMS(toLonLat(coordinates));
-    alert("Coordenadas: " + hdms);
+  var featureFound = false;
+  map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+    if (layer === vectorLayerPoints) {
+      var coordinates = feature.getGeometry().getCoordinates();
+      var hdms = (0,ol_coordinate__WEBPACK_IMPORTED_MODULE_21__.toStringHDMS)((0,ol_proj__WEBPACK_IMPORTED_MODULE_2__.toLonLat)(coordinates));
+      popup.show(coordinates, "<div>Coordenadas: " + hdms + "</div>");
+      featureFound = true;
+    }
   });
+  if (!featureFound) {
+    popup.hide();
+  }
 });
 })();
 

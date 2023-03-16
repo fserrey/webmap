@@ -16,7 +16,8 @@ import { FullScreen, OverviewMap } from 'ol/control';
 import LayerSwitcher from 'ol-layerswitcher';
 import Overlay from 'ol/Overlay';
 import { Circle as CircleStyle } from 'ol/style';
-
+import { toStringHDMS } from 'ol/coordinate';
+import { toLonLat } from 'ol/proj';
 
 const rasterLayer1 = new TileLayer({
   source: new OSM(),
@@ -30,12 +31,6 @@ const rasterLayer2 = new TileLayer({
   }),
   title: "OpenTopoMap",
   type: "base",
-});
-
-const stamenTonerLayer = new ol.layer.Tile({
-  source: new ol.source.Stamen({
-    layer: 'toner',
-  }),
 });
 
 const pointFeature = new Feature({
@@ -77,26 +72,42 @@ const vectorLayerLines = new VectorLayer({
 });
 
 const map = new Map({
-  layers: [rasterLayer1, rasterLayer2, stamenTonerLayer, vectorLayerPoints, vectorLayerLines],
+  layers: [rasterLayer1, rasterLayer2, vectorLayerPoints, vectorLayerLines],
   target: "map",
   view: new View({
     center: fromLonLat([-3.7038, 40.4168]),
     zoom: 14,
+    maxZoom: 18,
+    minZoom: 10,
   }),
   controls: [],
 });
 
 map.addControl(new FullScreen());
-map.addControl(new OverviewMap());
+const overviewMapControl = new OverviewMap({
+  collapsed: false,
+});
+map.addControl(overviewMapControl);
+
 const layerSwitcher = new LayerSwitcher({
   tipLabel: "Capas",
 });
 map.addControl(layerSwitcher);
 
+const popup = new Overlay.Popup();
+map.addOverlay(popup);
+
 map.on("click", function (evt) {
-  map.forEachFeatureAtPixel(evt.pixel, function (feature) {
-    const coordinates = feature.getGeometry().getCoordinates();
-    const hdms = toStringHDMS(toLonLat(coordinates));
-    alert("Coordenadas: " + hdms);
+  let featureFound = false;
+  map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+    if (layer === vectorLayerPoints) {
+      const coordinates = feature.getGeometry().getCoordinates();
+      const hdms = toStringHDMS(toLonLat(coordinates));
+      popup.show(coordinates, "<div>Coordenadas: " + hdms + "</div>");
+      featureFound = true;
+    }
   });
+  if (!featureFound) {
+    popup.hide();
+  }
 });

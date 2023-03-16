@@ -20,7 +20,7 @@ h1, h2 {
 
 .map {
   width: 100%;
-  height: calc(100% - 100px);
+  height: 100%;
   position: absolute;
   top: 100px;
   left: 0;
