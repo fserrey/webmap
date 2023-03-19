@@ -1,0 +1,14 @@
+{
+    "name": "openlayers-madrid",
+    "version": "1.0.0",
+    "description": "P3 - OpenLayers Madrid",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "dependencies": {
+      "express": "^4.17.1",
+      "ol": "^6.9.0"
+    }
+  }
+  
