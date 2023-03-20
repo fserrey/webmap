@@ -1,5 +1,3 @@
-var sidenav_popup_parques
-
 //mapa de Madrid
 var map = L.map('map', {
   miniMap: true,
@@ -64,7 +62,6 @@ var nombres_geograficos = L.tileLayer.providerESP('NombresGeograficos');
 
 // Agregar plugin de edición
 var drawnItems = new L.FeatureGroup().addTo(map);
-// map.addLayer(drawnItems);
 
 // Cambiar estilo de los polígonos dibujados
 map.on('draw:created', function (e) {
@@ -80,36 +77,15 @@ map.on('draw:created', function (e) {
 
 // Agregar datos usando omnivore
 var parquesCSV = omnivore.csv('data/puntos.csv')
-  .on('ready', function (layer) {
-    this.eachLayer(function (marker) {
-      marker.bindPopup('<strong>' + marker.toGeoJSON().properties.nombre + '</strong><br>' +
-        marker.toGeoJSON().properties.descripcion);
-    });
-  })
-  .addTo(map);
-
-
-document.addEventListener('DOMContentLoaded', function() {
-  var elems = document.querySelectorAll('.sidenav');
-  var instances = M.Sidenav.init(elems);
-  sidenav_popup_parques = instances[0];
-});
-
-// Cargar capa de puntos con omnivore y agregar pop-up con atributos
-// omnivore.csv('data/puntos.csv')
-//   .on('ready', function (layer) {
-//     this.eachLayer(function (marker) {
-//       marker.bindPopup('<strong>' + marker.toGeoJSON().properties.nombre + '</strong><br>' +
-//         marker.toGeoJSON().properties.descripcion);
-//     });
-//   })
-//   .addTo(map);
-
-// Agregar plugin de minimapa
-//var miniMap = new L.Control.MiniMap(osmLayer, {
-//  toggleDisplay: true,
-//  minimized: false
-//}).addTo(map);
+.on('ready', function (layer) {
+  this.eachLayer(function (marker) {
+    var lat = marker.getLatLng().lat;
+    var lng = marker.getLatLng().lng;
+    marker.bindPopup('<strong>' + marker.toGeoJSON().properties.nombre + '</strong><br>' +
+      lat + ', ' + lng);
+  });
+})
+.addTo(map);
 
 var osmMiniMap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 18,
@@ -146,12 +122,8 @@ var overlays = {
   "Nombres geográficos": nombres_geograficos,
 };
 
-
-
-// var controlCapas = new 
 L.control.layers(baseMaps, overlays).addTo(map);
-//map.addControl(controlCapas);
-//controlCapas.addTo(map);
+
 
 var drawControl = new L.Control.Draw({
   edit: {
@@ -169,4 +141,23 @@ var drawControl = new L.Control.Draw({
 map.addControl(drawControl);
 
 
+// Import the geosearch provider
+const { GeoSearchControl, OpenStreetMapProvider } = window.GeoSearch;
 
+// Create the search control and add it to the map
+const searchControl = new GeoSearchControl({
+  provider: new OpenStreetMapProvider(),
+  style: 'bar',
+  autoComplete: true,
+  autoCompleteDelay: 250,
+  showMarker: true,
+  showPopup: true,
+  autoClose: true,
+  searchLabel: 'Busca una dirección',
+  keepResult: true,
+  animateZoom: true,
+  position: 'bottomleft',
+  zoomLevel: 18,
+});
+
+map.addControl(searchControl);
